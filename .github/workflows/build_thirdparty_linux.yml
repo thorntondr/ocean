@@ -3,10 +3,10 @@
 name: Build Third-party libraries on Linux (static)
 
 on:
-  schedule:
-    # Execute this workflow:
-    # Mon-Sun, every 24 hours at 6 am (UTC)
-    - cron: '0 6 * * *'
+  # schedule:
+  #   # Execute this workflow:
+  #   # Mon-Sun, every 24 hours at 6 am (UTC)
+  #   - cron: '0 6 * * *'
   pull_request:
     branches:
       - main
