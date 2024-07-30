@@ -1,0 +1,20 @@
+name: Build and test pull request
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  prebuild:
+    uses: ./.github/workflows/build_thirdparty_linux_helper.yml
+    secrets: inherit
+
+  build:
+    needs: prebuild
+    uses: ./.github/workflows/build_ocean_linux_helper.yml
+    secrets: inherit
+
+  tmp:
+    needs: build
+    uses: ./.github/workflows/test_ocean_linux_helper.yml
