@@ -21,7 +21,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache install artifacts
+        id: cache-thirdparty-install
+        uses: actions/cache@v4
+        with:
+          key: thirdparty-install-${{ matrix.build_config }}-${{ hashFiles('build/cmake/') }}
+          path: ${{ env.OCEAN_THIRDPARTY_INSTALL_PATH }}
+
       - name: Install dependencies
+        if: ${{ steps.cache-thirdparty-install.outputs.cache-hit != 'true' }}
         run: |
           sudo apt-get update
           sudo apt-get upgrade -y
@@ -31,19 +40,13 @@ jobs:
             libdeflate-dev libudev-dev zlib1g-dev
 
       # - name: Install a newer CMake
+      #   if: ${{ steps.cache-thirdparty-install.outputs.cache-hit != 'true' }}
       #   run: |
       #     sudo apt purge --auto-remove cmake
       #     wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
       #     sudo apt-add-repository -y 'deb https://apt.kitware.com/ubuntu/ jammy main'
       #     sudo apt update
       #     sudo apt install -y cmake
-
-      - name: Cache install artifacts
-        id: cache-thirdparty-install
-        uses: actions/cache@v4
-        with:
-          key: thirdparty-install-${{ matrix.build_config }}-${{ hashFiles('build/cmake/') }}
-          path: ${{ env.OCEAN_THIRDPARTY_INSTALL_PATH }}
 
       - name: Build and install third-party libraries for Ocean
         if: ${{ steps.cache-thirdparty-install.outputs.cache-hit != 'true' }}
