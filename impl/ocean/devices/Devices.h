@@ -11,6 +11,8 @@
 #include "ocean/base/Base.h"
 #include "ocean/base/Messenger.h"
 
+// unnecessary comment #2
+
 namespace Ocean
 {
 
